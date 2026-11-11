@@ -2,7 +2,7 @@ import { isAdmin } from "@/lib/admin";
 import { db, isRevealed, tally } from "@/lib/db";
 import { byId, contestants } from "@/lib/contestants";
 import { naira } from "@/lib/config";
-import { login, logout, recheck, setRevealed } from "./actions";
+import { login, logout, recheck, recheckPending, setRevealed } from "./actions";
 import Logo from "@/components/Logo";
 
 export const dynamic = "force-dynamic";
@@ -123,6 +123,16 @@ export default async function Admin({ searchParams }: { searchParams: Promise<Re
           <input name="ref" placeholder="FF-XXXXXXXXXXXX" defaultValue={sp.ref ?? ""} />
           <button className="btn btn-gold" type="submit" style={{ minHeight: 46, fontSize: 14 }}>Re-check with Paystack</button>
         </form>
+        <form action={recheckPending} style={{ marginTop: 14 }}>
+          <button className="btn btn-ghost" type="submit" style={{ minHeight: 46, fontSize: 14 }}>
+            Re-check all pending payments
+          </button>
+        </form>
+        {sp.swept && (
+          <p style={{ marginTop: 12, fontSize: 14 }}>
+            Checked {sp.swept} pending · <b style={{ color: "#a9dcb1" }}>{sp.recovered} recovered</b>
+          </p>
+        )}
         {sp.state && (
           <p style={{ marginTop: 12, fontSize: 14 }}>
             {sp.ref}: <span className={`tag ${sp.state === "paid" ? "paid" : sp.state === "unknown" ? "failed" : sp.state}`}>{sp.state}</span>

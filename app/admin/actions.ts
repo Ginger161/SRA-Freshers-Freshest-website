@@ -39,3 +39,23 @@ export async function recheck(form: FormData) {
   const r = /^FF-[0-9A-F]{12}$/.test(ref) ? await finalize(ref) : { state: "unknown" };
   redirect(`/admin?ref=${encodeURIComponent(ref)}&state=${r.state}`);
 }
+
+/** Asks Paystack about every unfinished payment from the last 2 days and credits the ones that went through. */
+export async function recheckPending() {
+  if (!(await isAdmin())) redirect("/admin");
+  const since = new Date(Date.now() - 48 * 3600 * 1000).toISOString();
+  const { data } = await db()
+    .from("votes")
+    .select("reference")
+    .eq("status", "pending")
+    .gte("created_at", since)
+    .order("created_at", { ascending: false })
+    .limit(300);
+  let paid = 0;
+  for (const r of data ?? []) {
+    const res = await finalize(r.reference).catch(() => null);
+    if (res?.state === "paid") paid++;
+  }
+  revalidatePath("/admin");
+  redirect(`/admin?swept=${data?.length ?? 0}&recovered=${paid}`);
+}
