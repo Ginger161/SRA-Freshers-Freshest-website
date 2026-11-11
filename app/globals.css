@@ -13,7 +13,7 @@
   --red: #b3262d;
   --ease: cubic-bezier(0.22, 1, 0.36, 1);
   --ease-spring: cubic-bezier(0.34, 1.56, 0.64, 1);
-  --gutter: 20px;
+  --gutter: clamp(24px, 6vw, 40px);
   color-scheme: dark;
 }
 
@@ -359,7 +359,7 @@ header.top {
 .title .f {
   font-family: var(--f-script), cursive;
   font-weight: 400;
-  font-size: clamp(112px, 30vw, 190px);
+  font-size: clamp(96px, 26vw, 190px);
   line-height: 0.92;
   margin-right: -0.1em;
   background: linear-gradient(170deg, var(--gold-3) 10%, var(--gold) 45%, var(--gold-2) 90%);
@@ -371,7 +371,7 @@ header.top {
 .title .w {
   font-family: var(--f-serif), Georgia, serif;
   font-weight: 600;
-  font-size: clamp(48px, 13vw, 84px);
+  font-size: clamp(38px, 11vw, 84px);
   letter-spacing: 0.06em;
   padding-bottom: 0.22em;
   background: linear-gradient(100deg, var(--gold-2) 0%, var(--gold) 30%, var(--gold-3) 48%, var(--gold) 60%, var(--gold-2) 100%);

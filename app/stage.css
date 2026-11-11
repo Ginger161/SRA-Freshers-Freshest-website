@@ -305,12 +305,12 @@ body,
 }
 
 @media (min-width: 1100px) {
-  header.top { max-width: 1280px; padding: 26px 48px; }
+  header.top { max-width: 1360px; padding: 28px 64px; }
   .brand-logo { width: 50px; height: 50px; }
 
   .hero {
-    max-width: 1280px;
-    padding: 40px 48px 40px;
+    max-width: 1360px;
+    padding: 40px 64px 40px;
     display: grid;
     grid-template-columns: minmax(0, 1.05fr) minmax(0, 0.95fr);
     align-items: center;
@@ -392,7 +392,7 @@ body,
 
   .section { padding-top: 120px; }
   .h2 { font-size: 68px; }
-  .wrap { max-width: 1280px; padding: 0 48px; }
+  .wrap { max-width: 1360px; padding: 0 64px; }
   .tabs, .search { max-width: 560px; }
   .grid { gap: 36px 26px; }
 
