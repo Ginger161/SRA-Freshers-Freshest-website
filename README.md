@@ -25,8 +25,8 @@ Paid voting site. ₦100 per vote through Paystack. Counts stay hidden until an 
 1. Go to **Settings → API Keys & Webhooks** and copy the **Live Public Key** and **Live Secret Key**.
 2. Set the **Live Webhook URL** to `https://<your-site>/api/paystack/webhook`.
 
-### 3. Netlify
-Import the GitHub repo. Netlify detects Next.js automatically. Then go to **Site configuration → Environment variables** and add:
+### 3. Vercel
+Import the GitHub repo (Next.js is detected automatically). Under **Environment Variables** add:
 
 | Key | Value |
 | --- | --- |
@@ -35,7 +35,7 @@ Import the GitHub repo. Netlify detects Next.js automatically. Then go to **Site
 | `NEXT_PUBLIC_PAYSTACK_PUBLIC_KEY` | `pk_live_…` |
 | `PAYSTACK_SECRET_KEY` | `sk_live_…` |
 | `ADMIN_PASSWORD` | a long password |
-| `NEXT_PUBLIC_SITE_URL` | `https://<your-site>.netlify.app` |
+| `NEXT_PUBLIC_SITE_URL` | `https://<your-site>.vercel.app` |
 | `NEXT_PUBLIC_VOTING_OPENS_AT` | `2026-11-11T18:00:00+01:00` |
 | `NEXT_PUBLIC_VOTING_CLOSES_AT` | `2026-11-12T15:00:00+01:00` |
 
