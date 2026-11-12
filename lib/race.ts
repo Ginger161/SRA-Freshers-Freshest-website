@@ -66,5 +66,11 @@ export async function results() {
     voters: emails.size,
     candidates: contestants.length,
     rows: ranked.map((r) => ({ id: r.id, pct: total ? (r.v / total) * 100 : 0 })),
+    /** per category: share of that category's votes */
+    byGender: (["f", "m"] as const).map((g) => {
+      const list = ranked.filter((r) => contestants.find((c) => c.id === r.id)?.gender === g);
+      const t = list.reduce((s, r) => s + r.v, 0);
+      return { g, rows: list.map((r) => ({ id: r.id, pct: t ? (r.v / t) * 100 : 0 })) };
+    }),
   };
 }

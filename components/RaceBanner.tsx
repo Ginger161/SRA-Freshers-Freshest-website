@@ -55,7 +55,7 @@ export default function RaceBanner() {
   }
   return (
     <Link href="/results" className="rbanner win">
-      <span className="rb-tag">The winner is in</span>
+      <span className="rb-tag">The winners are in</span>
       <span className="rb-text">See the results</span>
     </Link>
   );
