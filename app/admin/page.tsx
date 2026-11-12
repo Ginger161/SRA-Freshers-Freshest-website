@@ -6,6 +6,7 @@ import { login, logout, recheck, recheckPending, setRaceFrozen, setRaceMode, set
 import { phaseOf, settings } from "@/lib/race";
 import { RACE_AT, RACE_MINUTES } from "@/lib/config";
 import Logo from "@/components/Logo";
+import { AutoRefresh, SubmitButton } from "@/components/AdminBits";
 
 export const dynamic = "force-dynamic";
 export const metadata = { title: "Admin · Freshest Fresher", robots: { index: false } };
@@ -29,9 +30,9 @@ export default async function Admin({ searchParams }: { searchParams: Promise<Re
             <input type="password" name="password" required autoComplete="current-password" />
           </label>
           {sp.e && <p className="err">Wrong password.</p>}
-          <button className="btn btn-gold" type="submit">
+          <SubmitButton className="btn btn-gold" pending="Signing in…">
             Sign in
-          </button>
+          </SubmitButton>
         </form>
       </main>
     );
@@ -69,13 +70,12 @@ export default async function Admin({ searchParams }: { searchParams: Promise<Re
             Export CSV
           </a>
           <form action={logout}>
-            <button className="btn btn-ghost" type="submit">
-              Sign out
-            </button>
+            <SubmitButton pending="Signing out…">Sign out</SubmitButton>
           </form>
         </div>
       </div>
 
+      <AutoRefresh />
       <div className="stats">
         <div className="stat"><span>Votes</span><b>{totalVotes.toLocaleString()}</b></div>
         <div className="stat"><span>Revenue</span><b>{naira(totalKobo / 100)}</b></div>
@@ -94,14 +94,14 @@ export default async function Admin({ searchParams }: { searchParams: Promise<Re
           {(["on", "auto", "off"] as const).map((m) => (
             <form action={setRaceMode} key={m}>
               <input type="hidden" name="mode" value={m} />
-              <button className={`btn ${race.mode === m ? "btn-gold" : "btn-ghost"}`} type="submit">
+              <SubmitButton className={`btn ${race.mode === m ? "btn-gold" : "btn-ghost"}`} pending="Switching…">
                 {m === "on" ? "Start race now" : m === "auto" ? "Automatic" : "Hide race"}
-              </button>
+              </SubmitButton>
             </form>
           ))}
           <form action={setRaceFrozen}>
             <input type="hidden" name="value" value={race.frozen ? "false" : "true"} />
-            <button className="btn btn-ghost" type="submit">{race.frozen ? "Unfreeze board" : "Freeze board"}</button>
+            <SubmitButton pending="Saving…">{race.frozen ? "Unfreeze board" : "Freeze board"}</SubmitButton>
           </form>
         </div>
       </div>
@@ -114,9 +114,9 @@ export default async function Admin({ searchParams }: { searchParams: Promise<Re
           </span>
           <form action={setRevealed}>
             <input type="hidden" name="value" value={revealed ? "false" : "true"} />
-            <button className={`btn ${revealed ? "btn-ghost" : "btn-gold"}`} type="submit">
+            <SubmitButton className={`btn ${revealed ? "btn-ghost" : "btn-gold"}`} pending={revealed ? "Hiding…" : "Revealing…"}>
               {revealed ? "Hide results" : "Reveal winners"}
-            </button>
+            </SubmitButton>
           </form>
           <a href="/results" style={{ color: "var(--gold)", fontSize: 14 }}>/results</a>
         </div>
@@ -148,16 +148,16 @@ export default async function Admin({ searchParams }: { searchParams: Promise<Re
         </p>
         <form action={recheck} className="inline-form">
           <input name="ref" placeholder="FF-XXXXXXXXXXXX" defaultValue={sp.ref ?? ""} />
-          <button className="btn btn-gold" type="submit" style={{ minHeight: 46, fontSize: 14 }}>Re-check with Paystack</button>
+          <SubmitButton className="btn btn-gold" style={{ minHeight: 46, fontSize: 14 }} pending="Asking Paystack…">Re-check with Paystack</SubmitButton>
         </form>
         <form action={recheckPending} style={{ marginTop: 14 }}>
-          <button className="btn btn-ghost" type="submit" style={{ minHeight: 46, fontSize: 14 }}>
+          <SubmitButton style={{ minHeight: 46, fontSize: 14 }} pending={`Checking ${(pending.count ?? 0).toLocaleString()} pending with Paystack…`}>
             Re-check all pending payments
-          </button>
+          </SubmitButton>
         </form>
         {sp.swept && (
           <p style={{ marginTop: 12, fontSize: 14 }}>
-            Checked {sp.swept} pending · <b style={{ color: "#a9dcb1" }}>{sp.recovered} recovered</b>
+            Done{sp.at ? ` at ${sp.at}` : ""}: checked {sp.swept} pending · <b style={{ color: "#a9dcb1" }}>{sp.recovered} recovered</b>
           </p>
         )}
         {sp.state && (

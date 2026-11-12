@@ -52,12 +52,14 @@ export async function recheckPending() {
     .order("created_at", { ascending: false })
     .limit(300);
   let paid = 0;
-  for (const r of data ?? []) {
-    const res = await finalize(r.reference).catch(() => null);
-    if (res?.state === "paid") paid++;
+  const list = data ?? [];
+  for (let i = 0; i < list.length; i += 10) {
+    const res = await Promise.all(list.slice(i, i + 10).map((r) => finalize(r.reference).catch(() => null)));
+    paid += res.filter((x) => x?.state === "paid").length;
   }
+  const at = new Date().toLocaleTimeString("en-GB", { hour: "numeric", minute: "2-digit", hour12: true, timeZone: "Africa/Lagos" });
   revalidatePath("/admin");
-  redirect(`/admin?swept=${data?.length ?? 0}&recovered=${paid}`);
+  redirect(`/admin?swept=${list.length}&recovered=${paid}&at=${encodeURIComponent(at)}`);
 }
 
 export async function setRaceMode(form: FormData) {
