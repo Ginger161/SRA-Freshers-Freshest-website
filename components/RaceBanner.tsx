@@ -3,6 +3,7 @@
 import Link from "next/link";
 import { usePathname } from "next/navigation";
 import { useRace } from "./RaceContext";
+import { RACE_MINUTES } from "@/lib/config";
 
 const pad = (n: number) => String(n).padStart(2, "0");
 export const clock = (ms: number) => {
@@ -27,7 +28,7 @@ export default function RaceBanner() {
     const soon = toStart <= 5 * 60 * 1000;
     return (
       <Link href="/#final10" className={`rbanner${soon ? " soon" : ""}`}>
-        <span className="rb-tag">{soon ? "Starting soon" : "The Final 10"}</span>
+        <span className="rb-tag">{soon ? "Starting soon" : `The Final ${RACE_MINUTES}`}</span>
         <span className="rb-text">
           Top 7 go live at {at(r.raceAt)}
         </span>
@@ -42,7 +43,7 @@ export default function RaceBanner() {
           <i />
           Live
         </span>
-        <span className="rb-text">The Final 10 is on</span>
+        <span className="rb-text">The Final {RACE_MINUTES} is on</span>
         <span className="rb-clock">{clock(toClose)}</span>
       </Link>
     );

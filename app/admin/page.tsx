@@ -4,7 +4,7 @@ import { byId, contestants } from "@/lib/contestants";
 import { naira } from "@/lib/config";
 import { login, logout, recheck, recheckPending, setRaceFrozen, setRaceMode, setRevealed } from "./actions";
 import { phaseOf, settings } from "@/lib/race";
-import { RACE_AT } from "@/lib/config";
+import { RACE_AT, RACE_MINUTES } from "@/lib/config";
 import Logo from "@/components/Logo";
 
 export const dynamic = "force-dynamic";
@@ -84,7 +84,7 @@ export default async function Admin({ searchParams }: { searchParams: Promise<Re
       </div>
 
       <div className="box">
-        <h2>The Final 10</h2>
+        <h2>The Final {RACE_MINUTES}</h2>
         <p style={{ margin: "0 0 12px", fontSize: 14, color: "var(--soft)" }}>
           Board is <b style={{ color: "var(--gold)" }}>{phase.toUpperCase()}</b> · mode <b>{race.mode}</b>
           {race.frozen ? " · frozen" : ""} · starts automatically at{" "}

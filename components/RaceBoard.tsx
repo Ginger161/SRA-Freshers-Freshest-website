@@ -3,7 +3,7 @@
 import Link from "next/link";
 import { useEffect, useRef, useState } from "react";
 import { contestants } from "@/lib/contestants";
-import { RACE_SIZE } from "@/lib/config";
+import { RACE_MINUTES, RACE_SIZE } from "@/lib/config";
 import { useRace } from "./RaceContext";
 import { clock } from "./RaceBanner";
 
@@ -42,7 +42,7 @@ export default function RaceBoard() {
   const left = r.closesAt - r.now;
 
   return (
-    <section id="race" className={`race${live ? " is-live" : " is-frozen"}${live && left < 60000 ? " last-minute" : ""}`} aria-label="The Final 10 race">
+    <section id="race" className={`race${live ? " is-live" : " is-frozen"}${live && left < 60000 ? " last-minute" : ""}`} aria-label="The final race">
       <div className="race-head">
         {live ? (
           <span className="race-live">
@@ -54,7 +54,7 @@ export default function RaceBoard() {
         )}
         <h2 className="race-title">
           The <span>Final</span> <br className="desk-br" />
-          10<em className="race-title-sub"> minutes</em>
+          {RACE_MINUTES}<em className="race-title-sub"> minutes</em>
         </h2>
         {live ? (
           <div className="race-clock" aria-live="off">
