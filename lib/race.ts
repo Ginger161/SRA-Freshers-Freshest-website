@@ -45,9 +45,10 @@ export async function raceState() {
 
 /** Rounded-down figure for "over X" copy. */
 export function approx(n: number) {
-  if (n < 100) return { n, over: false };
-  const step = n < 1000 ? 100 : n < 10000 ? 500 : 1000;
-  const r = Math.floor(n / step) * step;
+  // round down to a milestone (…, 100, 200, 500, 1,000, 2,000, 5,000, 10,000, …) so totals stay vague
+  if (n < 20) return { n, over: false };
+  const mag = Math.pow(10, Math.floor(Math.log10(n)));
+  const r = [5, 2, 1].map((k) => k * mag).find((m) => m <= n)!;
   return { n: r, over: n > r };
 }
 
