@@ -32,7 +32,6 @@ export default function RaceBanner() {
         <span className="rb-text">
           Top 7 go live at {at(r.raceAt)}
         </span>
-        <span className="rb-clock">{clock(toStart)}</span>
       </Link>
     );
   }
@@ -44,7 +43,6 @@ export default function RaceBanner() {
           Live
         </span>
         <span className="rb-text">The Final {RACE_MINUTES} is on</span>
-        <span className="rb-clock">{clock(toClose)}</span>
       </Link>
     );
   }

@@ -1,7 +1,6 @@
 "use client";
 
 import { useRace } from "./RaceContext";
-import { clock } from "./RaceBanner";
 import { RACE_MINUTES, RACE_SIZE } from "@/lib/config";
 
 const at = (t: number) =>
@@ -18,7 +17,6 @@ export default function Final10Intro() {
         <h2 className="h2">
           The <em>Final</em> {RACE_MINUTES}
         </h2>
-        <div className="f10-clock">{r.now ? clock(r.raceAt - r.now) : "--:--"}</div>
         <p className="f10-line">The top {RACE_SIZE} go live. Help your fresher race to the top.</p>
       </div>
     </section>
