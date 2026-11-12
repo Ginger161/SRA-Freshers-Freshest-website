@@ -10,6 +10,8 @@ const MAX = 5;
 const POLL_MS = 6000;
 const LIFE_MS = 14000;
 const FRESH_ON_LOAD_MS = 10 * 60 * 1000;
+// solid, progressively darker pills (no filters/transparency → no repaint flicker on phones)
+const DEPTH_BG = ["#1d1912", "#191610", "#16130e", "#13110c", "#110f0b"];
 
 const ago = (iso: string, now: number) => {
   const s = Math.max(0, Math.round((now - new Date(iso).getTime()) / 1000));
@@ -79,8 +81,9 @@ export default function LiveFeed() {
           key={it.id}
           className={`toast${it.leaving ? " out" : ""}`}
           style={{
-            transform: `translateY(${-i * 46}px) scale(${1 - i * 0.035})`,
-            filter: `brightness(${1 - i * 0.13})`,
+            transform: `translate3d(0, ${-i * 46}px, 0) scale(${1 - i * 0.035})`,
+            background: DEPTH_BG[i],
+            ["--dim" as string]: String(1 - i * 0.16),
             zIndex: MAX - i,
           }}
         >

@@ -432,3 +432,47 @@ body,
   .holo { transform: none !important; }
   .dust { display: none; }
 }
+
+/* ═════════ PHONES: same look, nothing that repaints or flickers ═════════ */
+
+.toast > * {
+  opacity: var(--dim, 1);
+}
+
+@media (hover: none) {
+  .holo {
+    will-change: auto;
+    transform: perspective(900px) rotateY(calc(var(--px) * 6deg)) rotateX(calc(var(--py) * -6deg));
+  }
+  .card .portrait,
+  .card:hover .portrait {
+    transform: perspective(900px) rotateY(calc(var(--px) * 6deg)) rotateX(calc(var(--py) * -6deg));
+    box-shadow: 0 16px 34px rgba(0, 0, 0, 0.5), 0 0 0 1px rgba(227, 196, 137, 0.12);
+  }
+  .portrait img,
+  .card:hover .portrait img {
+    transform: scale(1.04);
+  }
+  .holo-foil {
+    mix-blend-mode: normal;
+    background-size: 300% 300%;
+    opacity: calc(0.03 + var(--mag) * 0.1);
+  }
+  .holo-glare {
+    mix-blend-mode: normal;
+    background: radial-gradient(
+      farthest-corner circle at calc(50% + var(--px) * 55%) calc(40% + var(--py) * 55%),
+      rgba(255, 246, 225, 0.16) 0%,
+      transparent 50%
+    );
+  }
+  .holo-edge {
+    background: linear-gradient(160deg, #fff1cf, var(--gold-2) 30%, #5c451f 55%, var(--gold) 80%, #fff1cf);
+  }
+  .stage .grain {
+    animation: none;
+  }
+  .beam {
+    will-change: auto;
+  }
+}

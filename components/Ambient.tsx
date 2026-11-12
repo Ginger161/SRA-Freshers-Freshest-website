@@ -38,8 +38,11 @@ export default function Ambient() {
       // drift the neutral point slowly so it follows how the phone is held
       base.b += (e.beta - base.b) * 0.004;
       base.g += (e.gamma - base.g) * 0.004;
-      tx = Math.max(-1, Math.min(1, (e.gamma - base.g) / 22));
-      ty = Math.max(-1, Math.min(1, (e.beta - base.b) / 22));
+      // phone sensors are noisy: low-pass the raw reading before it becomes the light target
+      const rx = Math.max(-1, Math.min(1, (e.gamma - base.g) / 24));
+      const ry = Math.max(-1, Math.min(1, (e.beta - base.b) / 24));
+      tx += (rx - tx) * 0.12;
+      ty += (ry - ty) * 0.12;
     };
     window.addEventListener("pointermove", onPointer, { passive: true });
     window.addEventListener("deviceorientation", onTilt, { passive: true });
@@ -55,8 +58,12 @@ export default function Ambient() {
     // gold dust
     const cv = dust.current!;
     const ctx = cv.getContext("2d")!;
-    const dpr = Math.min(1.5, window.devicePixelRatio || 1);
-    const N = window.innerWidth < 700 ? 34 : 60;
+    const touch = window.matchMedia("(hover: none)").matches;
+    const dpr = touch ? 1 : Math.min(1.5, window.devicePixelRatio || 1);
+    const N = touch ? 18 : 60;
+    // phones: restyle the light in coarse steps and at most ~20 times a second
+    const STEP = touch ? 0.03 : 0.004;
+    let frame = 0;
     let W = 0, H = 0;
     const resize = () => {
       W = window.innerWidth;
@@ -82,13 +89,14 @@ export default function Ambient() {
       last = t;
 
       // only restyle when the light has actually moved (idle pages cost nothing)
+      frame++;
       const nx = cx + (tx - cx) * 0.07;
       const ny = cy + (ty - cy) * 0.07;
-      if (Math.abs(nx - wx) > 0.004 || Math.abs(ny - wy) > 0.004) {
+      if ((!touch || frame % 3 === 0) && (Math.abs(nx - wx) > STEP || Math.abs(ny - wy) > STEP)) {
         wx = nx;
         wy = ny;
-        root.style.setProperty("--lx", nx.toFixed(3));
-        root.style.setProperty("--ly", ny.toFixed(3));
+        root.style.setProperty("--lx", nx.toFixed(2));
+        root.style.setProperty("--ly", ny.toFixed(2));
       }
       cx = nx;
       cy = ny;
@@ -100,10 +108,15 @@ export default function Ambient() {
         rail.current.style.transform = `scaleY(${p.toFixed(4)})`;
       }
 
+      if (touch && frame % 2) {
+        raf = requestAnimationFrame(loop);
+        return;
+      }
       ctx.clearRect(0, 0, W, H);
       for (const m of motes) {
-        m.y -= dt * 0.012 * m.z;
-        m.s += dt * 0.6;
+        const k = touch ? 2 : 1; // phones draw every other frame, so move twice as far
+        m.y -= dt * 0.012 * m.z * k;
+        m.s += dt * 0.6 * k;
         if (m.y < -0.05) {
           m.y = 1.05;
           m.x = Math.random();
