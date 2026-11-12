@@ -19,20 +19,7 @@ export default function Final10Intro() {
           The <em>Final</em> {RACE_MINUTES}
         </h2>
         <div className="f10-clock">{r.now ? clock(r.raceAt - r.now) : "--:--"}</div>
-        <ol className="f10-steps">
-          <li>
-            <b>The top {RACE_SIZE} go live</b>
-            <span>For the last {RACE_MINUTES} minutes the leaderboard opens. Positions only, no vote counts.</span>
-          </li>
-          <li>
-            <b>Every vote moves the board</b>
-            <span>Cards overtake each other as votes land. Push your fresher up.</span>
-          </li>
-          <li>
-            <b>{at(r.closesAt)}: the board freezes</b>
-            <span>Votes paid before {at(r.closesAt)} count. The winner is revealed once every payment is verified.</span>
-          </li>
-        </ol>
+        <p className="f10-line">The top {RACE_SIZE} go live. Help your fresher race to the top.</p>
       </div>
     </section>
   );

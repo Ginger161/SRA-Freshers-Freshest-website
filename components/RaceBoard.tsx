@@ -60,10 +60,7 @@ export default function RaceBoard() {
           <div className="race-clock" aria-live="off">
             {r.now ? clock(left) : "--:--"}
           </div>
-        ) : (
-          <div className="race-stamp">Final standings being verified</div>
-        )}
-        <p className="race-note">Top {RACE_SIZE} · positions move as votes land</p>
+        ) : null}
         {live && (
           <a href="#contenders" className="btn btn-gold race-cta">
             Push your fresher up

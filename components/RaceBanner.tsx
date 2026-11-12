@@ -52,7 +52,6 @@ export default function RaceBanner() {
     return (
       <Link href="/#race" className="rbanner">
         <span className="rb-tag">Voting closed</span>
-        <span className="rb-text">Final standings being verified</span>
       </Link>
     );
   }
