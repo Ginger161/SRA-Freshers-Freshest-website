@@ -2,6 +2,7 @@
 
 import { CLOSES_AT, OPENS_AT, PRICE_NAIRA } from "@/lib/config";
 import { usePhase } from "./usePhase";
+import { useRace } from "./RaceContext";
 
 const fmtDay = (d: Date) =>
   d.toLocaleString("en-GB", {
@@ -18,6 +19,8 @@ const pad = (n: number) => String(n).padStart(2, "0");
 
 export default function Countdown() {
   const { now, phase } = usePhase();
+  const race = useRace();
+  const racing = race?.phase === "race";
 
   const target = phase === "soon" ? OPENS_AT : CLOSES_AT;
   const left = now === null ? null : Math.max(0, target.getTime() - now);
@@ -35,6 +38,7 @@ export default function Countdown() {
 
   return (
     <>
+      {!racing && (
       <div className="clock rise" style={{ ["--d" as string]: "0.75s" }}>
         <p className="eyebrow">{label}</p>
         {phase !== "closed" && (
@@ -51,6 +55,7 @@ export default function Countdown() {
         )}
         <span className="clock-foot">{fmtDay(phase === "soon" ? OPENS_AT : CLOSES_AT)}</span>
       </div>
+      )}
 
       {phase === "closed" ? (
         <a href="/results" className="btn btn-ghost rise" style={{ ["--d" as string]: "0.9s" }}>

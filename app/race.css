@@ -183,13 +183,15 @@
 .race-clock {
   font-family: var(--f-serif), Georgia, serif;
   font-weight: 700;
-  font-size: 60px;
+  font-size: clamp(76px, 24vw, 104px);
   line-height: 1;
   color: var(--gold);
   font-variant-numeric: tabular-nums;
+  transition: color 0.6s;
 }
 .last-minute .race-clock {
-  color: #ffcf9a;
+  color: #ff4d3d;
+  text-shadow: 0 0 30px rgba(255, 77, 61, 0.45);
   animation: beat 1s ease-in-out infinite;
 }
 @keyframes beat {
@@ -360,7 +362,7 @@
   .race-title { font-size: 80px; line-height: 0.95; }
   .race-title-sub { display: inline; font-style: normal; }
   .desk-br { display: inline; }
-  .race-clock { font-size: 120px; line-height: 0.9; }
+  .race-clock { font-size: 150px; line-height: 0.9; }
   .race-note { font-size: 15px; }
   .race-cta { display: inline-flex; margin-top: 8px; }
   .race-list { --row: 84px; --gap: 10px; max-width: none; }
