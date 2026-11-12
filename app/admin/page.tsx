@@ -2,7 +2,9 @@ import { isAdmin } from "@/lib/admin";
 import { db, isRevealed, tally } from "@/lib/db";
 import { byId, contestants } from "@/lib/contestants";
 import { naira } from "@/lib/config";
-import { login, logout, recheck, recheckPending, setRevealed } from "./actions";
+import { login, logout, recheck, recheckPending, setRaceFrozen, setRaceMode, setRevealed } from "./actions";
+import { phaseOf, settings } from "@/lib/race";
+import { RACE_AT } from "@/lib/config";
 import Logo from "@/components/Logo";
 
 export const dynamic = "force-dynamic";
@@ -42,6 +44,8 @@ export default async function Admin({ searchParams }: { searchParams: Promise<Re
     db().from("votes").select("reference", { count: "exact", head: true }).eq("status", "pending"),
   ]);
 
+  const race = await settings();
+  const phase = phaseOf(Date.now(), race);
   const map = new Map(rows.map((r) => [r.contestant_id, r]));
   const board = contestants
     .map((c) => ({ c, t: map.get(c.id) }))
@@ -77,6 +81,29 @@ export default async function Admin({ searchParams }: { searchParams: Promise<Re
         <div className="stat"><span>Revenue</span><b>{naira(totalKobo / 100)}</b></div>
         <div className="stat"><span>Paid transactions</span><b>{txns.toLocaleString()}</b></div>
         <div className="stat"><span>Awaiting payment</span><b>{(pending.count ?? 0).toLocaleString()}</b></div>
+      </div>
+
+      <div className="box">
+        <h2>The Final 10</h2>
+        <p style={{ margin: "0 0 12px", fontSize: 14, color: "var(--soft)" }}>
+          Board is <b style={{ color: "var(--gold)" }}>{phase.toUpperCase()}</b> · mode <b>{race.mode}</b>
+          {race.frozen ? " · frozen" : ""} · starts automatically at{" "}
+          {RACE_AT.toLocaleTimeString("en-GB", { hour: "numeric", minute: "2-digit", hour12: true, timeZone: "Africa/Lagos" })}
+        </p>
+        <div className="row-actions">
+          {(["on", "auto", "off"] as const).map((m) => (
+            <form action={setRaceMode} key={m}>
+              <input type="hidden" name="mode" value={m} />
+              <button className={`btn ${race.mode === m ? "btn-gold" : "btn-ghost"}`} type="submit">
+                {m === "on" ? "Start race now" : m === "auto" ? "Automatic" : "Hide race"}
+              </button>
+            </form>
+          ))}
+          <form action={setRaceFrozen}>
+            <input type="hidden" name="value" value={race.frozen ? "false" : "true"} />
+            <button className="btn btn-ghost" type="submit">{race.frozen ? "Unfreeze board" : "Freeze board"}</button>
+          </form>
+        </div>
       </div>
 
       <div className="box">

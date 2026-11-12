@@ -3,6 +3,8 @@ import Countdown from "@/components/Countdown";
 import ContestantGrid from "@/components/ContestantGrid";
 import CountUp from "@/components/CountUp";
 import Hand from "@/components/Hand";
+import RaceBoard from "@/components/RaceBoard";
+import Final10Intro from "@/components/Final10Intro";
 
 const CONFETTI = [
   { l: "6%", d: "0s", t: "9s", x: "40px", c: "#E3C489" },
@@ -41,6 +43,7 @@ export default function Home() {
     <>
       <Header />
       <main>
+        <RaceBoard />
         <section className="hero">
           <div className="confetti" aria-hidden="true">
             {CONFETTI.map((p, i) => (
@@ -75,6 +78,8 @@ export default function Home() {
           </div>
           <Hand />
         </section>
+
+        <Final10Intro />
 
         <section className="section wrap" aria-labelledby="prize-h">
           <div className="section-head" data-reveal>

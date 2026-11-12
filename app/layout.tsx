@@ -2,9 +2,12 @@ import type { Metadata, Viewport } from "next";
 import { Cormorant_Garamond, Manrope, Great_Vibes } from "next/font/google";
 import Ambient from "@/components/Ambient";
 import LiveFeed from "@/components/LiveFeed";
-import { SITE_URL } from "@/lib/config";
+import RaceProvider from "@/components/RaceContext";
+import RaceBanner from "@/components/RaceBanner";
+import { CLOSES_AT, RACE_AT, SITE_URL } from "@/lib/config";
 import "./globals.css";
 import "./stage.css";
+import "./race.css";
 
 const serif = Cormorant_Garamond({ subsets: ["latin"], weight: ["500", "600", "700"], style: ["normal", "italic"], variable: "--f-serif" });
 const sans = Manrope({ subsets: ["latin"], weight: ["400", "500", "600", "700"], variable: "--f-sans" });
@@ -36,9 +39,12 @@ export default function RootLayout({ children }: { children: React.ReactNode }) 
         <script dangerouslySetInnerHTML={{ __html: "document.documentElement.classList.add('js')" }} />
       </head>
       <body>
-        <Ambient />
-        {children}
-        <LiveFeed />
+        <RaceProvider raceAt={RACE_AT.getTime()} closesAt={CLOSES_AT.getTime()}>
+          <Ambient />
+          <RaceBanner />
+          {children}
+          <LiveFeed />
+        </RaceProvider>
       </body>
     </html>
   );

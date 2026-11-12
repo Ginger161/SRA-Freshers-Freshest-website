@@ -9,6 +9,12 @@ export const CLOSES_AT = new Date(
   process.env.NEXT_PUBLIC_VOTING_CLOSES_AT || "2026-11-12T15:00:00+01:00"
 );
 
+/** The Final 10: live top-7 race before close. */
+export const RACE_SIZE = 7;
+export const RACE_AT = new Date(
+  process.env.NEXT_PUBLIC_RACE_AT ? process.env.NEXT_PUBLIC_RACE_AT : CLOSES_AT.getTime() - 10 * 60 * 1000
+);
+
 export type Phase = "soon" | "open" | "closed";
 export const phaseAt = (t: number): Phase =>
   t < OPENS_AT.getTime() ? "soon" : t < CLOSES_AT.getTime() ? "open" : "closed";

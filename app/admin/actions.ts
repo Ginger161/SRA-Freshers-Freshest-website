@@ -59,3 +59,18 @@ export async function recheckPending() {
   revalidatePath("/admin");
   redirect(`/admin?swept=${data?.length ?? 0}&recovered=${paid}`);
 }
+
+export async function setRaceMode(form: FormData) {
+  if (!(await isAdmin())) redirect("/admin");
+  const mode = String(form.get("mode"));
+  if (["auto", "on", "off"].includes(mode)) await db().from("settings").upsert({ key: "race_mode", value: mode });
+  revalidatePath("/admin");
+  redirect("/admin");
+}
+
+export async function setRaceFrozen(form: FormData) {
+  if (!(await isAdmin())) redirect("/admin");
+  await db().from("settings").upsert({ key: "race_frozen", value: form.get("value") === "true" });
+  revalidatePath("/admin");
+  redirect("/admin");
+}

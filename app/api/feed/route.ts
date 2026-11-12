@@ -4,6 +4,8 @@ import { db } from "@/lib/db";
 
 export const dynamic = "force-dynamic";
 
+let feedCache: { at: number; items: { id: string; user: string; at: string }[] } | null = null;
+
 /** Anonymous "someone just voted" events. No names, contestants or amounts leave the server. */
 export async function GET() {
   // local preview only (never set FEED_MOCK on Vercel)
@@ -15,6 +17,7 @@ export async function GET() {
     });
     return NextResponse.json({ items });
   }
+  if (feedCache && Date.now() - feedCache.at < 3000) return NextResponse.json({ items: feedCache.items });
   try {
     const { data } = await db()
       .from("votes")
@@ -28,6 +31,7 @@ export async function GET() {
       const num = String(parseInt(h.slice(10, 18), 16) % 10000).padStart(4, "0");
       return { id, user: `user${num}`, at: r.paid_at };
     });
+    feedCache = { at: Date.now(), items };
     return NextResponse.json(
       { items },
       { headers: { "Cache-Control": "public, s-maxage=4, stale-while-revalidate=6" } }
